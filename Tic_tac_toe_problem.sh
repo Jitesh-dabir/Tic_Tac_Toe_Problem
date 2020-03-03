@@ -41,6 +41,26 @@ function display()
 	done
 }
 
+#CHECK IS POSITION EMPTY OR NOT
+function isEmpty()
+{
+	firstPosition=$1
+	secondPosition=$2
+	if [[ "${gameBoard[$firstPosition,$secondPosition]}" != "" ]]
+	then
+		printf "true"
+	else
+		printf "false"
+	fi
+}
+
+#GENERATE RANDOM VALUE
+function randomNumber
+{
+	local random=$((RANDOM%3))
+	printf $random
+}
+
 #GENERATE BOARD
 function resetBoard()
 {
@@ -95,6 +115,86 @@ function place()
 	fi
 }
 
+function checkWinning
+{
+local username=$1
+#CHECK FOR ROW WINNING
+   for ((index1=0; index1<$SIZE_OF_BOARD; index1++))
+   do
+   if [[ "${gameBoard[$index1,2]}" == "" && "${gameBoard[$index1,0]}" == "${gameBoard[$index1,1]}" && "${gameBoard[$index1,0]}" != "" && "${gameBoard[$index1,1]}" != "" && "${gameBoard[$index1,0]}" == $COMPUTER_CHOICE ]]
+   then
+      place $index1 2 $username
+		((winFlag++))
+      break
+   elif [[ "${gameBoard[$index1,0]}" == "" && "${gameBoard[$index1,1]}" == "${gameBoard[$index1,2]}" && "${gameBoard[$index1,1]}" != "" && "${gameBoard[$index1,2]}" != "" && "${gameBoard[$index1,1]}" == $COMPUTER_CHOICE ]]
+   then
+      place $index1 0 $username
+		((winFlag++))      
+		break
+ 	elif [[ "${gameBoard[$index1,1]}" == ""  && "${gameBoard[$index1,0]}" == "${gameBoard[$index1,2]}" && "${gameBoard[$index1,0]}" != "" && "${gameBoard[$index1,2]}" != "" && "${gameBoard[$index1,0]}" == $COMPUTER_CHOICE ]]
+   then
+      place $index1 1 $username
+		((winFlag++))      
+		break
+	fi
+done
+
+#CHECK FOR COLUMN WINNING
+  for ((index2=0; index2<$SIZE_OF_BOARD; index2++))
+   do
+
+   if [[ "${gameBoard[0,$index2]}" == "" && "${gameBoard[1,$index2]}" == "${gameBoard[2,$index2]}" && "${gameBoard[1,$index2]}" != "" && "${gameBoard[2,$index2]}" != "" && "${gameBoard[1,$index2]}" == $COMPUTER_CHOICE ]]
+   then
+      place 0 $index2 $username
+		((winFlag++))
+		break
+   elif [[ "${gameBoard[1,$index2]}" == "" && "${gameBoard[0,$index2]}" == "${gameBoard[2,$index2]}" && "${gameBoard[0,$index2]}" != "" && "${gameBoard[2,$index2]}" != "" && "${gameBoard[0,$index2]}" == $COMPUTER_CHOICE ]]
+   then
+      place 1 $index2 $username
+		((winFlag++))      
+		break
+
+   elif [[ "${gameBoard[2,$index2]}" == ""  && "${gameBoard[0,$index2]}" == "${gameBoard[1,$index2]}" && "${gameBoard[0,$index2]}" != "" && "${gameBoard[1,$index2]}" != "" && "${gameBoard[0,$index2]}" == $COMPUTER_CHOICE ]]
+   then
+      place 2 $index2 $username
+		((winFlag++))      
+		break 
+  fi
+done
+
+#CHECK FOR DIAGONAL WINNING
+   if [[ "${gameBoard[0,0]}" == "" && "${gameBoard[1,1]}" == "${gameBoard[2,2]}" && "${gameBoard[1,1]}" != "" && "${gameBoard[2,2]}" != "" && "${gameBoard[1,1]}" == $COMPUTER_CHOICE ]]
+   then
+      place 0 0 $username
+		((winFlag++))
+   elif [[ "${gameBoard[1,1]}" == "" && "${gameBoard[0,0]}" == "${gameBoard[2,2]}" && "${gameBoard[0,0]}" != "" && "${gameBoard[2,2]}" != "" && "${gameBoard[0,0]}" == $COMPUTER_CHOICE ]]
+   then
+      place 0 0 $username
+	  ((winFlag++))
+   elif [[ "${gameBoard[2,2]}" == ""  && "${gameBoard[0,0]}" == "${gameBoard[1,1]}" && "${gameBoard[0,0]}" != "" && "${gameBoard[1,1]}" != "" && "${gameBoard[0,0]}" == $COMPUTER_CHOICE ]]
+   then
+      place $0 $1 $username
+		((winFlag++))
+   fi
+
+
+#CHECK FOR OPPOSITE DIAGONAL WINNING
+   if [[ "${gameBoard[0,2]}" == "" && "${gameBoard[1,1]}" == "${gameBoard[2,0]}" && "${gameBoard[1,1]}" != "" && "${gameBoard[2,0]}" != "" && "${gameBoard[1,1]}" == $COMPUTER_CHOICE ]]
+   then
+      place 0 2 $username
+		((winFlag++))
+   elif [[ "${gameBoard[1,1]}" == "" && "${gameBoard[0,2]}" == "${gameBoard[2,0]}" && "${gameBoard[0,2]}" != "" && "${gameBoard[2,0]}" != "" && "${gameBoard[0,2]}" == $COMPUTER_CHOICE ]]
+   then
+      place 1 1 $username
+ 		((winFlag++)) 
+  elif [[ "${gameBoard[2,0]}" == ""  && "${gameBoard[1,1]}" == "${gameBoard[0,2]}" && "${gameBoard[0,2]}" != "" && "${gameBoard[1,1]}" != "" && "${gameBoard[0,2]}" == $COMPUTER_CHOICE ]]
+   then
+      place 2 0 $username
+		((winFlag++))   
+		fi
+}
+
+
 #FUNCTION TO CHECK ROW WINNING CONDITION
 function isrow()
 {
@@ -146,6 +246,7 @@ function isOppositeDiagonal()
 #CHECK ALL WINNING CONDITION
 function check()
 {
+	turnCheck=$1
 	if [[ "$(isrow)" == true ]]
 	then
 		printf "0"
@@ -162,6 +263,7 @@ function check()
 		printf "1"
 	fi
 }
+
 function user
 {
 	read -p "Enter your position :" firstValue secondValue
@@ -214,38 +316,69 @@ fi
 #READ VALUES FROM USER AND PLAY GAME
 for ((turn=0; turn<=$NUMBER_OF_TURN; turn++))
 do
-	#USER TURN
 	if [ $turn -gt $NUMBER_OF_TURN ]
 	then
 		echo "Tie"
-		break
+	break
 	fi
+	#PLAY FIRST USER
 	if [ $tossWin -eq $IS_PLAY_FIRST ]
 	then
+		#PLAY FIRST USER
 		user
 		display
 		tossWin=1
 	fi
-	if [ "$(check $turn)" == $breakValue ]
+	#CHECK WIN FOR FIRST USER
+	if [ "$(check $turn $firstUserName)" == $breakValue ]
 	then
 		echo "$firstUserName win"
 		break
 	fi
-	#COMPUTER TURN
-	if [[ $tossWin -eq $IS_PLAY_SECOND ]]
+
+	#PLAY SECOND USER
+	winFlag=0
+	if [ $tossWin -eq $IS_PLAY_SECOND ]
 	then
-		computer
-		display
-		tossWin=0
+		if [ $turn -le 1 ]
+		then
+			computer
+			display
+			tossWin=0
+		fi
 	fi
-	if [ "$(check $turn)" == $breakValue ]
+	#CHECK WINNING CONDITION FOR COMPUTER
+	if [[ $turn -gt 1 ]]
+	then
+		checkWinning $secondUserName
+	fi
+	if [[ $winFlag == 0 && $turn -gt 1 ]]
+	then
+		firstRandomValue="$( randomNumber )"
+		secondRandomValue="$( randomNumber )"
+		while [[ $turn -gt 1 && "$(isEmpty $firstRandomValue $secondRandomValue)" == true ]]
+		do
+			firstRandomValue=$((RANDOM%3))
+			secondRandomValue=$((RANDOM%3))
+		done
+		if [ $turn -gt 1 ]
+		then
+			place $firstRandomValue $secondRandomValue $secondUserName
+		fi
+	fi
+	#CHECK WIN FOR SECOND USER
+	if [[ "$(check $turn)" == $breakValue ]]
 	then
 		echo "$secondUserName win"
 		break
 	fi
+	display
+	tossWin=0
 	if [ $turn -gt $NUMBER_OF_TURN ]
 	then
 		echo "Tie"
-		break
+	break
 	fi
+	winFlag=0
 done
+display
