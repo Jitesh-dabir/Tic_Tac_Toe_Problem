@@ -53,6 +53,18 @@ function choice()
 	echo "User choice:$USER_CHOICE"
 }
 
+#FUNCTION CALL TO CHECK WHO WIN TOSS AND PLAY FIRST
+function whoplayfirst()
+{
+	local randomNumber=$((RANDOM%2))
+	if [ $randomNumber -eq $IS_CHOICE ]
+	then
+		printf "1"
+	else
+		printf "0"
+	fi
+}
+
 #FUNCTION CALL TO DISPLAY BOARD
 resetBoard
 display
@@ -60,3 +72,12 @@ display
 #FUNCTION CALL TO ASSIGN SYMBOL TO USER
 choice
 
+#FUNCTION CALL TO ASSING RANDOM CHOICE TO BOTH USER AND TOSS TO WIN
+tossWin="$(whoplayfirst)"
+if [[ $tossWin -eq $IS_PLAY_FIRST ]]
+then
+	read -p "You win toss you play first enter your name:" firstUserName
+else
+	printf "Computer win toss computer play first\n"
+	read -p "Please enter Your Name:" firstUserName
+fi
