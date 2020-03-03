@@ -53,7 +53,7 @@ function choice()
 	echo "User choice:$USER_CHOICE"
 }
 
-#FUNCTION CALL TO CHECK WHO WIN TOSS AND PLAY FIRST
+#FUNCTION CALL TO CHECK WHO WIN TOSS AND WHO PLAY FIRST
 function whoplayfirst()
 {
 	local randomNumber=$((RANDOM%2))
@@ -72,7 +72,7 @@ display
 #FUNCTION CALL TO ASSIGN SYMBOL TO USER
 choice
 
-#FUNCTION CALL TO ASSING RANDOM CHOICE TO BOTH USER AND TOSS TO WIN
+#FUNCTION CALL TO CHECK TOSS TO WIN AND WHO PLAY FIRST
 tossWin="$(whoplayfirst)"
 if [[ $tossWin -eq $IS_PLAY_FIRST ]]
 then
