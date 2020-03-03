@@ -8,9 +8,11 @@ declare -A gameBoard
 
 #CONSTANT
 SIZE_OF_BOARD=3
+IS_CHOICE=1
 
 #VARIABLE
-IS_CHOICE=1
+firstPosition=0
+secondPosition=0
 
 #FUNCTION TO DISPLAY BOARD
 function display()
