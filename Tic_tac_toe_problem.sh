@@ -122,23 +122,23 @@ function iscolumn()
 #FUNCTION TO CHECK DIAGONAL WINNING CONDITION
 function isDiagonal()
 {
-		if [[ "${gameBoard[1,1]}" != "" && "${gameBoard[0,0]}" == "${gameBoard[1,1]}" && "${gameBoard[1,1]}" == "${gameBoard[2,2]}" ]]
-		then
-			printf true
-		else
-			printf false
-		fi
+	if [[ "${gameBoard[1,1]}" != "" && "${gameBoard[0,0]}" == "${gameBoard[1,1]}" && "${gameBoard[1,1]}" == "${gameBoard[2,2]}" ]]
+	then
+		printf true
+	else
+		printf false
+	fi
 }
 
 #FUNCTION TO CHECK OPPOSITE DIAGONAL WINNING CONDITION
 function isOppositeDiagonal()
 {
-		if [[ "${gameBoard[1,1]}" != "" &&  "${gameBoard[0,2]}" == "${gameBoard[1,1]}" && "${gameBoard[1,1]}" == "${gameBoard[2,0]}" ]]
-		then
-			printf true
-		else
-			printf false
-		fi
+	if [[ "${gameBoard[1,1]}" != "" &&  "${gameBoard[0,2]}" == "${gameBoard[1,1]}" && "${gameBoard[1,1]}" == "${gameBoard[2,0]}" ]]
+	then
+		printf true
+	else
+		printf false
+	fi
 }
 
 #CHECK ALL WINNING CONDITION
