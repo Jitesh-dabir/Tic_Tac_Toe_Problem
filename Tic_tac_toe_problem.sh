@@ -9,6 +9,9 @@ declare -A gameBOARD
 #CONSTANT
 SIZE_OF_BOARD=3
 
+#VARIABLE
+IS_CHOICE=1
+
 #FUNCTION TO DISPLAY BOARD
 function display()
 {
@@ -28,15 +31,32 @@ function display()
 #GENERATE BOARD
 function resetBoard()
 {
-for ((rows=0; rows<$SIZE_OF_BOARD; rows++))
-do
-	for ((cols=0; cols<$SIZE_OF_BOARD; cols++))
+	for ((rows=0; rows<$SIZE_OF_BOARD; rows++))
 	do
-		gameBOARD[$rows,$cols]=""
+		for ((cols=0; cols<$SIZE_OF_BOARD; cols++))
+		do
+			gameBOARD[$rows,$cols]=""
+		done
 	done
-done
+}
+
+#ASSING RANDOM ASSIGN TO USER
+function choice()
+{
+	randomChoice=$((RANDOM%2))
+	if [ $randomChoice -eq $IS_CHOICE ]
+	then
+		USER_CHOICE=O
+	else
+		USER_CHOICE=X
+	fi
+	echo "UserChoice:$USER_CHOICE"
 }
 
 #FUNCTION CALL TO DISPLAY BOARD
 resetBoard
 display
+
+#FUNCTION CALL TO ASSIGN SYMBOL TO USER
+choice
+
