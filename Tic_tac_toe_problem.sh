@@ -12,9 +12,9 @@ IS_CHOICE=1
 NUMBER_OF_TURN=4
 IS_PLAY_FIRST=0
 IS_PLAY_SECOND=1
+WINNING_FLAG=0
 
 #VARIABLE
-IS_CHOICE=1
 firstArgument=0
 secondArgument=0
 firstValue=0
@@ -22,6 +22,8 @@ secondValue=0
 firstPosition=0
 secondPosition=0
 result=0
+turn=0
+breakValue=0
 
 #FUNCTION TO DISPLAY BOARD
 function display()
@@ -160,6 +162,28 @@ function check()
 		printf "1"
 	fi
 }
+function user
+{
+	read -p "Enter your position :" firstValue secondValue
+	while [ "$(isEmpty $firstValue $secondValue)" == true ]
+	do
+		read -p "Please enter valid position": firstValue secondValue
+	done 
+	place $firstValue $secondValue $firstUserName
+}
+
+function computer
+{
+	firstRandomValue=$((RANDOM%3))
+	secondRandomValue=$((RANDOM%3))
+	while [ "$(isEmpty $firstRandomValue $secondRandomValue)" == true ]
+	do
+		firstRandomValue=$((RANDOM%3))
+		secondRandomValue=$((RANDOM%3))
+	done 
+	place $firstRandomValue $secondRandomValue $secondUserName
+}
+
 
 #CHECK IF POSITION IS EMPTY OR NOT
 function isEmpty()
@@ -179,76 +203,49 @@ choice
 tossWin="$(whoPlayFirst)"
 if [[ $tossWin -eq $IS_PLAY_FIRST ]]
 then
-	read -p "Enter first user Name:" firstUserName	
-	read -p "Enter second user Name:" secondUserName
+	read -p "You Win Toss Enter Your Name:" firstUserName
+	secondUserName=Computer
 else
-	read -p "Enter second user Name:" secondUserName
-	read -p "Enter first user Name:" firstUserName
+	printf "Computer Win Toss\n"
+	secondUserName=Computer
+	read -p "Enter Your Name:" firstUserName
 fi
 
 #READ VALUES FROM USER AND PLAY GAME
-for ((index=0; index<=$NUMBER_OF_TURN; index++))
+for ((turn=0; turn<=$NUMBER_OF_TURN; turn++))
 do
-	if [ $index -gt $NUMBER_OF_TURN ]
+	#USER TURN
+	if [ $turn -gt $NUMBER_OF_TURN ]
 	then
 		echo "Tie"
 		break
 	fi
-	#FIRST PLAYER TURN 
 	if [ $tossWin -eq $IS_PLAY_FIRST ]
 	then
-		echo "$firstUserName Turn:"
-		read -p "Enter First_User position :" firstValue secondValue
-		while [ "$(isEmpty $firstValue $secondValue)" == true ]
-		do
-			read -p "Please enter valid position": firstValue secondValue
-		done
-		#FUNCTION CALL TO PLACE VALUE AT POSITION
-		place $firstValue $secondValue $firstUserName
-		if [ $index -ge 2  ]
-		then
-		#CHECK WINNING CONDITION FOR FIRST USER
-			result=$(check ${gameBoard[@]})
-			if [ $result -eq 0 ]
-			then
-				echo "$firstUserName win"
-				break
-			fi
-		fi
+		user
 		display
 		tossWin=1
 	fi
-	if [ $index -gt $NUMBER_OF_TURN ]
+	if [ "$(check $turn)" == $breakValue ]
+	then
+		echo "$firstUserName win"
+		break
+	fi
+	#COMPUTER TURN
+	if [[ $tossWin -eq $IS_PLAY_SECOND ]]
+	then
+		computer
+		display
+		tossWin=0
+	fi
+	if [ "$(check $turn)" == $breakValue ]
+	then
+		echo "$secondUserName win"
+		break
+	fi
+	if [ $turn -gt $NUMBER_OF_TURN ]
 	then
 		echo "Tie"
 		break
 	fi
-	#SECOND PLAYER TURN
-	if [ $tossWin -eq $IS_PLAY_SECOND ]
-	then
-		echo "$secondUserName Turn"
-		read -p "Enter First_User position :" firstValue secondValue
-		while [ "$(isEmpty $firstValue $secondValue)" == true ]
-		do
-			read -p "Please enter valid position": firstValue secondValue
-		done
-		place $firstValue $secondValue $secondUserName
-		#CHECK WINNING CONDITION FOR SECOND USER
-		if [ $index -ge 2  ]
-		then
-			result=$(check ${gameBoard[@]})
-			if [ $result -eq 0 ]
-			then
-				echo "$secondUserName win"
-				break
-			fi
-		fi
-		display
-		tossWin=0
-	fi
 done
-display
-if [[ $result -ne 0 ]]
-then
-	echo "Tie"
-fi
