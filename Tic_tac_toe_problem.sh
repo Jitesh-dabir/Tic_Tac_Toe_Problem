@@ -40,7 +40,7 @@ function resetBoard()
 	done
 }
 
-#ASSING RANDOM ASSIGN TO USER
+#ASSING RANDOM CHOICE TO USER
 function choice()
 {
 	randomChoice=$((RANDOM%2))
