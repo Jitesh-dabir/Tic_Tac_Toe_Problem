@@ -50,7 +50,7 @@ function choice()
 	else
 		USER_CHOICE=X
 	fi
-	echo "UserChoice:$USER_CHOICE"
+	echo "User choice:$USER_CHOICE"
 }
 
 #FUNCTION CALL TO DISPLAY BOARD
