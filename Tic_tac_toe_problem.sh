@@ -4,7 +4,7 @@
 echo ".......................................Welcome to Tic Tac Toe Problem........................................"
 
 #DECLARE A DICTIONARY
-declare -A gameBOARD
+declare -A gameBoard
 
 #CONSTANT
 SIZE_OF_BOARD=3
@@ -21,7 +21,7 @@ function display()
 	do
 		for ((cols=0; cols<$SIZE_OF_BOARD; cols++))
 		do
-			echo -ne "${gameBOARD[$rows,$cols]}\t|"
+			echo -ne "${gameBoard[$rows,$cols]}\t|"
 		done
 		echo
 		echo "_________________________"
@@ -35,7 +35,7 @@ function resetBoard()
 	do
 		for ((cols=0; cols<$SIZE_OF_BOARD; cols++))
 		do
-			gameBOARD[$rows,$cols]=""
+			gameBoard[$rows,$cols]=""
 		done
 	done
 }
@@ -81,3 +81,8 @@ else
 	printf "Computer win toss computer play first\n"
 	read -p "Please enter Your Name:" firstUserName
 fi
+
+#TO CHOOSE VALID CELLS DURING MY TURN
+read -p "Enter the position you want.. " firstPosition secondPosition
+gameBoard[$firstPosition,$secondPosition]=$USER_CHOICE
+display
