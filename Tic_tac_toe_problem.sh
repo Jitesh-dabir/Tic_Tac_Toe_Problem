@@ -233,7 +233,7 @@ do
 			read -p "Please enter valid position": firstValue secondValue
 		done
 		place $firstValue $secondValue $secondUserName
-      #CHECK WINNING CONDITION FOR SECOND USER
+		#CHECK WINNING CONDITION FOR SECOND USER
 		if [ $index -ge 2  ]
 		then
 			result=$(check ${gameBoard[@]})
