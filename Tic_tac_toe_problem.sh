@@ -197,22 +197,22 @@ function checkWinning
 	done
 
 	#CHECK FOR DIAGONAL WINNING
-   if [[ "${gameBoard[0,0]}" == "" && "${gameBoard[1,1]}" == "${gameBoard[2,2]}" && "${gameBoard[1,1]}" != "" && $checkSymbol != "${gameBoard[1,1]}" ]]
-   then
-      place 0 0 $username
+	if [[ "${gameBoard[0,0]}" == "" && "${gameBoard[1,1]}" == "${gameBoard[2,2]}" && "${gameBoard[1,1]}" != "" && $checkSymbol != "${gameBoard[1,1]}" ]]
+	then
+		place 0 0 $username
 		((winFlag++))
 		return
-   elif [[ "${gameBoard[1,1]}" == "" && "${gameBoard[0,0]}" == "${gameBoard[2,2]}" && "${gameBoard[2,2]}" != "" && $checkSymbol != "${gameBoard[0,0]}" ]]
-   then
-      place 1 1 $username
-	  ((winFlag++))
-		 return
-   elif [[ "${gameBoard[2,2]}" == ""  && "${gameBoard[0,0]}" == "${gameBoard[1,1]}" && "${gameBoard[1,1]}" != "" && $checkSymbol != "${gameBoard[0,0]}" ]]
-   then
-      place 2 2 $username
+	elif [[ "${gameBoard[1,1]}" == "" && "${gameBoard[0,0]}" == "${gameBoard[2,2]}" && "${gameBoard[2,2]}" != "" && $checkSymbol != "${gameBoard[0,0]}" ]]
+	then
+		place 1 1 $username
 		((winFlag++))
-		 return
-   fi
+		return
+	elif [[ "${gameBoard[2,2]}" == ""  && "${gameBoard[0,0]}" == "${gameBoard[1,1]}" && "${gameBoard[1,1]}" != "" && $checkSymbol != "${gameBoard[0,0]}" ]]
+	then
+		place 2 2 $username
+		((winFlag++))
+		return
+	fi
 
 	#CHECK FOR OPPOSITE DIAGONAL WINNING
 	if [[ "${gameBoard[0,2]}" == "" && "${gameBoard[1,1]}" == "${gameBoard[2,0]}" && "${gameBoard[2,0]}" != "" && $checkSymbol != "${gameBoard[1,1]}" ]]
@@ -385,23 +385,22 @@ do
 	middleCount=0
 	if [ $tossWin -eq $IS_PLAY_SECOND ]
 	then
-      if [[ $turn -ge 1 && $winFlag == 0 ]]
-      then
-         checkWinning $COMPUTER_CHOICE  $secondUserName
-      fi 
-      if [[ $turn -ge 1 && $winFlag == 0 ]]
-      then
-         checkWinning $USER_CHOICE  $secondUserName
-      fi 
-      if [[ $cornerCount == 0 && $winFlag == 0 ]]
-      then
-      choiceCorner $secondUserName
-      fi
-      if [[  $cornerCount == 0  && $middleCount == 0 && $winFlag == 0 ]]
-      then
-      choiceMiddle $secondUserName
-      fi  
-
+		if [[ $turn -ge 1 && $winFlag == 0 ]]
+		then
+			checkWinning $COMPUTER_CHOICE  $secondUserName
+		fi 
+		if [[ $turn -ge 1 && $winFlag == 0 ]]
+		then
+			checkWinning $USER_CHOICE  $secondUserName
+		fi 
+		if [[ $cornerCount == 0 && $winFlag == 0 ]]
+		then
+			choiceCorner $secondUserName
+		fi
+		if [[  $cornerCount == 0  && $middleCount == 0 && $winFlag == 0 ]]
+		then
+			choiceMiddle $secondUserName
+		fi
 		if [[ $turn -le 1 && $winFlag == 0 && $cornerCount == 0 &&  $middleCount == 0 ]]
 		then
 			computer
