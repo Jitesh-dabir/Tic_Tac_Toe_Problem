@@ -373,11 +373,11 @@ do
 		echo "$firstUserName win"
 		break
 	fi
-   if [ $turn -ge $NUMBER_OF_TURN ]
-   then
-      echo "Tie"
-   break
-   fi
+	if [ $turn -ge $NUMBER_OF_TURN ]
+	then
+		echo "Tie"
+		break
+	fi
 
 	#PLAY SECOND USER
 	winFlag=0
@@ -406,7 +406,7 @@ do
 			computer
 		fi
 	fi
-	#IF ALL CONDITION FAILS THEN IT PALCE RANDOM POSITION
+	#IF ALL CONDITION FAILS THEN IT PLACE RANDOM POSITION
 	if [[ $winFlag == 0 && $turn -gt 1  && $cornerCount == 0 &&  $middleCount == 0 ]]
 	then
 		firstRandomValue="$( randomNumber )"
